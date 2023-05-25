@@ -29,10 +29,17 @@ pub mod anagram {
         result.sort();
         result.dedup()
     }
+
+    pub const BANNER: &str = r#"
+    _                           _                             
+   |_)  _. ._   _|  _  ._ _    |_) _.  _  _       _  ._ _|  _ 
+   | \ (_| | | (_| (_) | | |   |  (_| _> _> \/\/ (_) | (_| _> 
+   "#;
 }
 
 #[cfg(test)]
 mod anagram_tests {
+    use super::anagram::BANNER;
     use super::anagram::get_anagrams;
 
     #[test]
@@ -40,5 +47,10 @@ mod anagram_tests {
         let list = get_anagrams("test");
 
         assert_eq!(12, list.len());
+    }
+
+    #[test]
+    fn test_banner() {
+        assert!(!BANNER.is_empty());
     }
 }
