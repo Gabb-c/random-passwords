@@ -19,17 +19,17 @@ const BANNER: &str = r#"
 fn main() -> Result<()> {
     println!("{BANNER}");
 
-    let subscriber = FmtSubscriber::builder()
+    match FmtSubscriber::builder()
         .with_max_level(Level::TRACE)
-        .finish();
+        .compact()
+        .without_time()
+        .try_init()
+    {
+        Ok(()) => info!("random password generator started succesfully"),
+        Err(_) => println!("error while creating logger"),
+    };
 
-    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
-
-    info!("random password generator started succesfully");
-
-    let input = Password::new().with_prompt("Type a password").interact()?;
-
-    info!("password recived");
+    let input = Password::new().with_prompt(" Type a password").interact()?;
 
     let anagrams = get_anagrams(&input);
 
@@ -40,11 +40,9 @@ fn main() -> Result<()> {
         .open(FILE_PATH)
         .expect("Error opening file...");
 
-    info!("password file created");
-
     file.write_all(anagrams.join("\n").as_bytes()).expect("msg");
 
-    info!("passwords saved");
+    info!("passwords saved in file {FILE_PATH}");
 
     Ok(())
 }
