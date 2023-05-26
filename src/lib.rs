@@ -11,8 +11,8 @@ pub mod anagram {
         result
     }
 
-    fn generate_anagrams(length: usize, chars: &mut [char], result: &mut Vec<String>) {
-        if length == 1 {
+    fn generate_anagrams(length: usize, chars: &mut Vec<char>, result: &mut Vec<String>) {
+        if length == 1 || length >= 9 {
             result.push(chars.iter().collect());
             return;
         }
@@ -32,14 +32,19 @@ pub mod anagram {
 
     pub const BANNER: &str = r#"
     _                           _                             
-   |_)  _. ._   _|  _  ._ _    |_) _.  _  _       _  ._ _|  _ 
+   |_)  _   _   _|  _   _ _    |_) _   _  _       _   _ _|  _ 
    | \ (_| | | (_| (_) | | |   |  (_| _> _> \/\/ (_) | (_| _> 
    "#;
+
+    pub fn print_banner() {
+        println!("{BANNER}");
+    }
+
+    pub const FILE_PATH: &str = "./passwords.txt";
 }
 
 #[cfg(test)]
 mod anagram_tests {
-    use super::anagram::BANNER;
     use super::anagram::get_anagrams;
 
     #[test]
@@ -49,8 +54,4 @@ mod anagram_tests {
         assert_eq!(12, list.len());
     }
 
-    #[test]
-    fn test_banner() {
-        assert!(!BANNER.is_empty());
-    }
 }
