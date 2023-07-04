@@ -3,14 +3,16 @@ use std::{
     io::{Result, Write},
 };
 
-use random_passwords::anagram::{get_anagrams, print_banner, FILE_PATH};
+use random_passwords::anagram::{print_banner, FILE_PATH, generate_passwords};
 
-use dialoguer::Password;
+// use dialoguer::Password;
 use tracing::{error, info, Level};
 use tracing_subscriber::FmtSubscriber;
 
 fn main() -> Result<()> {
     print_banner();
+    let passwords = generate_passwords();
+    let passwords_count = passwords.len();
 
     // build and init the logger
     match FmtSubscriber::builder()
@@ -23,12 +25,12 @@ fn main() -> Result<()> {
         Err(_) => println!("error while creating logger"),
     };
 
-    // get user input
-    let input = Password::new().with_prompt(" Type a password").interact()?;
+    // // get user input
+    // let input = Password::new().with_prompt(" Type a password").interact()?;
 
-    // get all anagrams for the given password
-    let anagrams = get_anagrams(&input);
-    let anagrams_count = anagrams.len();
+    // // get all anagrams for the given password
+    // let anagrams = get_anagrams(&input);
+    // let anagrams_count = anagrams.len();
 
     // open the file "passwords.txt" with read and write permissions
     let mut file = OpenOptions::new()
@@ -40,8 +42,8 @@ fn main() -> Result<()> {
         .expect("Error opening file...");
 
     // write and save the generated passwords to the file
-    match file.write_all(anagrams.join("\n").as_bytes()) {
-        Ok(()) => Ok(info!("{anagrams_count} passwords saved in file {FILE_PATH}")),
+    match file.write_all(passwords.join("\n").as_bytes()) {
+        Ok(()) => Ok(info!("{passwords_count} passwords saved in file {FILE_PATH}")),
         Err(_) => Ok(error!("error while saving the generated passwords to file")),
     }
 }

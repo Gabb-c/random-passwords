@@ -30,6 +30,35 @@ pub mod anagram {
         result.dedup()
     }
 
+    pub fn generate_passwords() -> Vec<String> {
+        let mut passwords = Vec::new();
+        let letters = [
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+            'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        ];
+
+        generate_password_alphabet(&mut passwords, &letters, String::new(), 4);
+
+        passwords
+    }
+
+    fn generate_password_alphabet(
+        passwords: &mut Vec<String>,
+        letters: &[char],
+        current_password: String,
+        length: usize,
+    ) {
+        if length == 0 {
+            passwords.push(current_password);
+            return;
+        }
+
+        for letter in letters {
+            let new_password = format!("{}{}", current_password, letter);
+            generate_password_alphabet(passwords, letters, new_password, length - 1);
+        }
+    }
+
     pub const BANNER: &str = r#"
     _                           _                             
    |_)  _   _   _|  _   _ _    |_) _   _  _       _   _ _|  _ 
@@ -53,5 +82,4 @@ mod anagram_tests {
 
         assert_eq!(12, list.len());
     }
-
 }
